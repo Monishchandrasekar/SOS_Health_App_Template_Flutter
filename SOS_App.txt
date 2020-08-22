@@ -1,0 +1,937 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          brightness: Brightness.light,
+          primaryColor: Colors.white,
+          accentColor: Colors.white,
+          scaffoldBackgroundColor: Colors.white,
+          textSelectionHandleColor: Colors.black,
+          textSelectionColor: Colors.black12,
+          cursorColor: Colors.black,
+          toggleableActiveColor: Colors.black,
+          inputDecorationTheme: InputDecorationTheme(
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black.withOpacity(0.1)),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black),
+            ),
+            labelStyle: const TextStyle(
+              color: Colors.black,
+            ),
+          ),
+        ),
+        home: StartPage()
+    );
+  }
+}
+
+class StartPage extends StatefulWidget {
+  @override
+  _StartState createState() => _StartState();
+}
+
+class _StartState extends State<StartPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Center(
+            child: Image(
+              image: AssetImage(
+                  'assets/images/home.png'
+              ),
+            ),
+          ),
+          Text(
+            'REMOTE HEALTHCARE APP',
+            style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          FlatButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
+            },
+            child: Text(
+              'Register',
+              style: TextStyle(
+                  fontSize: 20
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          FlatButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+            },
+            child: Text(
+              'Login',
+              style: TextStyle(
+                  fontSize: 20
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class RegisterPage extends StatefulWidget {
+  @override
+  _RegisterPageState createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    //final TextEditingController _user = new TextEditingController(); //edited(Abhi)
+    final TextEditingController _pass = TextEditingController();
+    final TextEditingController _confirmPass = TextEditingController();
+    final TextEditingController _EMail = TextEditingController();
+    final TextEditingController _Phone = TextEditingController();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+        title: Center(
+          child: Text(
+              'Register'
+          ),
+        ),
+      ),
+      backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Expanded(child: SizedBox(
+                height: 30
+            )),
+            new Expanded(child: TextFormField(
+              //controller: _user,   //edited(Abhi)
+              decoration: InputDecoration(
+                labelText: 'Username',
+                icon: Icon(Icons.person),
+              ),
+              validator: (String value) {
+                if(value.trim().isEmpty) {
+                  return 'Username is required';
+                }
+              },
+            )),
+            new Expanded(child: TextFormField(
+              obscureText: true,
+              controller: _pass,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                icon: Icon(Icons.keyboard),
+              ),
+              validator: (String value) {
+                if(value.trim().isEmpty) {
+                  return 'Password is required';
+                }
+              },
+            )),
+            new Expanded(child: TextFormField(
+              obscureText: true,
+              controller: _confirmPass,
+              decoration: InputDecoration(
+                labelText: 'Re-enter Password',
+                icon: Icon(Icons.keyboard),
+              ),
+              validator: (String value) {
+                if(value.trim().isEmpty) {
+                  return 'Re-enter Password Correctly';
+                }
+                if(value != _pass.text) {
+                  return 'Passwords do not match';
+                }
+              },
+            )),
+            new Expanded(child: TextFormField(
+              controller: _EMail,
+              decoration: InputDecoration(
+                labelText: 'EMail',
+                icon: Icon(Icons.email),
+              ),
+              validator: (String value) {
+                if(value.trim().isEmpty) {
+                  return 'EMail is required';
+                }
+                if(!((value.contains('@'))&&((value.contains('.com'))||(value.contains('.in'))))){
+                  return 'Email is incorrect';
+                }
+              },
+            )),
+            new Expanded(child: TextFormField(
+              obscureText: true,
+              controller: _Phone,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                labelText: 'Phone Number',
+                icon: Icon(Icons.phone),
+              ),
+              validator: (String value) {
+                if(value.trim().isEmpty) {
+                  return 'Phone Number is required';
+                }
+                if(value.length!=10){
+                  return 'Phone Number is incorrect';
+                }
+              },
+            )),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+            ),
+            Row(
+              children: <Widget>[
+                const Spacer(),
+                OutlineButton(
+                  onPressed: _submit,
+                  highlightedBorderColor: Colors.black,
+                  child: const Text(
+                      'Register'
+                  ),
+                ),
+              ],
+            ),
+            FlatButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+              },
+              child: Text('Already have an account? Login'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _submit() {
+    print('Form Submitted');
+    if(_formKey.currentState.validate()==true) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()
+          )
+      ); //edited(Abhi)
+    }
+  }
+}
+
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  @override
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    final TextEditingController _pass1 = TextEditingController();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+        title: Center(
+          child: Text(
+              'Login'
+          ),
+        ),
+      ),
+      backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Username',
+                icon: Icon(Icons.person),
+              ),
+              validator: (String value) {
+                if(value.trim().isEmpty) {
+                  return 'Username is required';
+                }
+              },
+            ),
+            SizedBox(
+                height: 30
+            ),
+            TextFormField(
+              obscureText: true,
+              controller: _pass1,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                icon: Icon(Icons.keyboard),
+              ),
+              validator: (String value) {
+                if(value.trim().isEmpty) {
+                  return 'Password is required';
+                }
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+            ),
+            Row(
+              children: <Widget>[
+                const Spacer(),
+                OutlineButton(
+                  onPressed: _submit,
+                  highlightedBorderColor: Colors.black,
+                  child: const Text(
+                      'Login'
+                  ),
+                ),
+              ],
+            ),
+            FlatButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+              },
+              child: Text("Don't have an account? Register"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _submit() {
+    print('Form Submitted');
+    /*if(_formKey.currentState.validate()==true) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage())
+      );
+      }
+     */
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage())
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  final String user;
+  HomePage({Key key, this.user}) : super(key: key);
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: Text(
+                    'Menu',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 27)
+                ),
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(255, 240, 230, 1)
+                ),
+              ),
+              ListTile(
+                title: Text('About Patient'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PatientProfile())
+                  );
+                },
+              ),
+              ListTile(
+                title: Text('Chat'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChatScreen())
+                  );
+                },
+              ),
+              ListTile(
+                title: Text('History'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HistoryScreen())
+                  );
+                },
+              ),
+              ListTile(
+                title: Text('Tips'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TipsPage())
+                  );
+                },
+              ),
+              ListTile(
+                title: Text('Log Out'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StartPage())
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+          title: Center(
+            child: Text(
+                'Home Page'
+            ),
+          ),
+        ),
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              Card(
+                color: Color.fromRGBO(255, 240, 230, 1),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const ListTile(
+                      leading: Icon(Icons.favorite, color: Colors.red,),
+                      title: Text('PULSE RATE MONITOR'),
+                      subtitle: Text('Check your pulse'),
+                    ),
+                    ButtonBar(
+                      children: <Widget>[
+                        FlatButton(
+                          onPressed: () {},
+                          child: Text('CHECK'),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 30),
+              Card(
+                color: Color.fromRGBO(255, 240, 230, 1),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const ListTile(
+                      leading: Icon(Icons.favorite, color: Colors.red,),
+                      title: Text('TEMPERATURE SENSOR'),
+                      subtitle: Text('Check your temperature'),
+                    ),
+                    ButtonBar(
+                      children: <Widget>[
+                        FlatButton(
+                          onPressed: () {},
+                          child: Text('CHECK'),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        )
+    );
+  }
+}
+
+class PatientProfile extends StatefulWidget {
+  @override
+  State createState() => new PatientProfileState();
+}
+
+class PatientProfileState extends State<PatientProfile> {
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+        backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+        appBar: new AppBar(
+            backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+            title: new Text("Profile")
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+                height: 50
+            ),
+            Center(
+              child: Image(
+                image: AssetImage(
+                  'assets/images/profilepic.png',
+                ),
+                height: 120,
+              ),
+            ),
+            SizedBox(
+                height: 20
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Text("PERSON NAME",
+                  style: TextStyle(
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+                height: 30
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: new Text("Age: "),
+                ),
+              ],
+            ),
+            SizedBox(
+                height: 10
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: new Text("Email Address: "),
+                ),
+              ],
+            ),
+            SizedBox(
+                height: 10
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: new Text("Address: "),
+                ),
+              ],
+            ),
+            SizedBox(
+                height: 10
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: new Text("Phone Number: "),
+                ),
+              ],
+            ),
+          ],
+        )
+    );
+  }
+}
+
+class ChatScreen extends StatefulWidget {
+  @override
+  State createState() => new ChatScreenState();
+}
+
+class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
+  final List<ChatMessage> _messages = <ChatMessage>[];
+  final TextEditingController _textController = new TextEditingController();
+  bool _isComposing = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+      appBar: new AppBar(
+        title: new Text("Chat Window"),
+        elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
+      ),
+      body: new Container(
+          child: new Column(
+            children: <Widget>[
+              new Flexible(
+                child: new ListView.builder(
+                  padding: new EdgeInsets.all(8.0),
+                  reverse: true,
+                  itemBuilder: (_, int index) => _messages[index],
+                  itemCount: _messages.length,
+                ),
+              ),
+              new Divider(height: 1.0),
+              new Container(
+                decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+                child: _buildTextComposer(),
+              ),
+            ],
+          ),
+          decoration: Theme.of(context).platform == TargetPlatform.iOS
+              ? new BoxDecoration(
+            border: new Border(
+              top: new BorderSide(color: Colors.grey[200]),
+            ),
+          )
+              : null
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    for (ChatMessage message in _messages) {
+      message.animationController.dispose();
+    }
+    super.dispose();
+  }
+
+  void _handleSubmitted(String text) {
+    _textController.clear();
+    setState(() {
+      _isComposing = false;
+    });
+    ChatMessage message = new ChatMessage(
+      text: text,
+      animationController: new AnimationController(
+        duration: new Duration(milliseconds: 700),
+        vsync: this,
+      ),
+    );
+    setState(() { _messages.insert(0, message); });
+    message.animationController.forward();
+  }
+
+  Widget _buildTextComposer() {
+    return new IconTheme(
+      data: new IconThemeData(color: Theme.of(context).accentColor),
+      child: new Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: new Row(
+          children: <Widget>[
+            new Flexible(
+              child: new TextField(
+                controller: _textController,
+                onChanged: (String text) {
+                  setState(() {
+                    _isComposing = text.length > 0;
+                  });
+                },
+                onSubmitted: _handleSubmitted,
+                decoration: new InputDecoration.collapsed(hintText: "Send a message"),
+              ),
+            ),
+            new Container(
+              margin: new EdgeInsets.symmetric(horizontal: 4.0),
+              child: Theme.of(context).platform == TargetPlatform.iOS ?
+              new CupertinoButton(
+                child: new Text("Send"),
+                onPressed: _isComposing
+                    ? () => _handleSubmitted(_textController.text)
+                    : null,
+              ) :
+              new IconButton(
+                icon: new Icon(Icons.send),
+                onPressed: _isComposing
+                    ? () => _handleSubmitted(_textController.text)
+                    : null,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+const String _name = "greatghoul";
+class ChatMessage extends StatelessWidget {
+  ChatMessage({this.text, this.animationController});
+
+  final String text;
+  final AnimationController animationController;
+
+  @override
+  Widget build(BuildContext context) {
+    return new SizeTransition(
+      sizeFactor: new CurvedAnimation(
+        parent: animationController,
+        curve: Curves.easeOut,
+      ),
+      axisAlignment: 0.0,
+      child: new Container(
+        margin: const EdgeInsets.symmetric(vertical: 10.0),
+        child: new Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            new Container(
+              margin: const EdgeInsets.only(right: 16.0),
+              child: new CircleAvatar(child: new Text(_name[0])),
+            ),
+            new Expanded(
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  new Text(_name, style: Theme.of(context).textTheme.subhead),
+                  new Container(
+                    margin: const EdgeInsets.only(top: 5.0),
+                    child: new Text(text),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HistoryScreen extends StatefulWidget {
+  @override
+  State createState() => new HistoryScreenState();
+}
+
+class HistoryScreenState extends State<HistoryScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+        backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+        appBar: new AppBar(
+          backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+          title: new Text("History"),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+                height: 50
+            ),
+            SizedBox(
+                height: 20
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Text("HISTORY",
+                  style: TextStyle(
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+                height: 30
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: new Text("Last High Temperature: "),
+                ),
+              ],
+            ),
+            SizedBox(
+                height: 10
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: new Text("Highest Temperature Recorded: "),
+                ),
+              ],
+            ),
+            SizedBox(
+                height: 10
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: new Text("Pulse Reading: "),
+                ),
+              ],
+            ),
+            SizedBox(
+                height: 10
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: new Text("Heart BPM: "),
+                ),
+              ],
+            ),
+            SizedBox(
+                height: 10
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: new Text("Current Health Condition: "),
+                ),
+              ],
+            ),
+          ],
+        )
+    );
+  }
+}
+
+class TipsScreen extends StatefulWidget {
+  @override
+  State createState() => new TipsScreenState();
+}
+
+class TipsScreenState extends State<TipsScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+      appBar: new AppBar(
+          backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+          title: new Text("Tips")
+      ),
+    );
+  }
+}
+class TipsPage extends StatefulWidget {
+  @override
+  _TipsState createState() => _TipsState();
+}
+
+class _TipsState extends State<TipsPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+          title: Center(
+            child: Text(
+                'Tips'
+            ),
+          ),
+        ),
+        backgroundColor: Color.fromRGBO(255, 240, 230, 1),
+        body: CustomScrollView(
+          primary: false,
+          slivers: <Widget>[
+            SliverPadding(
+              padding: const EdgeInsets.all(20),
+              sliver: SliverGrid.count(
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                crossAxisCount: 2,
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Text('Eat a variety of foods.'),
+                    color: Colors.green[100],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Text(
+                        'Base your diet on plenty of foods rich in carbohydrates.'),
+                    color: Colors.green[200],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Text(
+                        'Replace saturated with unsaturated fat.'),
+                    color: Colors.green[300],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Text('Enjoy plenty of fruits and vegetables.'),
+                    color: Colors.green[400],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Text('Reduce salt and sugar intake.'),
+                    color: Colors.green[500],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Text(
+                        'Eat regularly, control the portion size.'),
+                    color: Colors.green[600],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Text('Drink plenty of fluids.'),
+                    color: Colors.green[600],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Text('Maintain a healthy body weight.'),
+                    color: Colors.green[600],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Text('Get on the move, make it a habit!'),
+                    color: Colors.green[600],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Text(
+                        'Start now! And keep changing gradually.'),
+                    color: Colors.green[600],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )
+    );
+  }
+}
